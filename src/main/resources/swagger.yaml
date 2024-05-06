@@ -1,0 +1,56 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "GitHub API"
+paths:
+  /repositories/{username}:
+    get:
+      summary: "Get repositories by username"
+      parameters:
+        - name: "username"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/RepoDetails"
+        '404':
+          description: "User not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    RepoDetails:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        owner:
+          type: "string"
+        branches:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/BranchDetails"
+    BranchDetails:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        lastCommitSha:
+          type: "string"
+    Error:
+      type: "object"
+      properties:
+        status:
+          type: "integer"
+        message:
+          type: "string"
